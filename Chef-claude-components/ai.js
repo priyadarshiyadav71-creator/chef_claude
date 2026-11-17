@@ -5,7 +5,7 @@ You are an assistant that receives a list of ingredients that a user has and sug
 `
 
 const groq = new Groq({
-  apiKey: import.meta.env.VITE_GROQ_API_KEY, // y missing
+  apiKey: import.meta.env.VITE_GROQ_API_KEY,
   dangerouslyAllowBrowser: true,
 });
 
