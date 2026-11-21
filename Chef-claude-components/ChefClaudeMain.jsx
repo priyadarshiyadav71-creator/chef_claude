@@ -5,11 +5,18 @@ import { getRecipeFromMistral } from "./ai.js";
 
 export default function Main() {
   const [ingredients, setIngredients] = React.useState([]);
-  let [recipe, setRecipe] = React.useState('');
+  let [recipe, setRecipe] = React.useState("");
+  const recipeSection = React.useRef(null);
+
+  React.useEffect(()=>{
+    if(recipe != '' && recipeSection != null){
+      recipeSection.current.scrollIntoView({behavior: 'smooth'})
+    }
+  }, [recipe])
 
   async function getRecipe() {
     const recipeMarkdown = await getRecipeFromMistral(ingredients);
-    setRecipe(recipeMarkdown)
+    setRecipe(recipeMarkdown);
   }
 
   function addIngredients(formData) {
@@ -30,9 +37,7 @@ export default function Main() {
             name="ingredients"
             aria-label="Add ingredient"
           />
-          <button className="ingredient-add-btn">
-            + Add ingredients
-          </button>
+          <button className="ingredient-add-btn">+ Add ingredients</button>
         </form>
 
         {ingredients.length < 4 && (
@@ -49,16 +54,12 @@ export default function Main() {
       )}
 
       {ingredients.length > 3 && (
-        <div className="ready-for-recipe-box chef-card">
+        <div ref={recipeSection} className="ready-for-recipe-box chef-card">
           <div className="recipe-callout-copy">
             <h3>Ready for recipe?</h3>
             <p>Generate a recipe from your list of ingredients.</p>
           </div>
-          <button
-            type="button"
-            className="get-recipe-btn"
-            onClick={getRecipe}
-          >
+          <button type="button" className="get-recipe-btn" onClick={getRecipe}>
             Get a recipe
           </button>
         </div>
@@ -66,6 +67,5 @@ export default function Main() {
 
       {recipe && <ClaudeRecipe recipe={recipe} />}
     </main>
-  )
+  );
 }
-
